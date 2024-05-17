@@ -67,7 +67,7 @@ const { log } = require("console");
 dotenv.config({ path: "./config.env" });
 
 /* ---------for Local database connection---------- */
-const DB = process.env.DATABASE_LOCAL;
+const DB = 'mongodb+srv://otmane:O6p8ooVNSvtjjqH8@chatapp.g8jcb5x.mongodb.net/?retryWrites=true&w=majority&appName=chatapp'
 
 /*--------for Atlas database connection----------*/
 // const DB = process.env.DATABASE.replace(
