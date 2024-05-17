@@ -42,20 +42,6 @@ const createSendToken = (user, statusCode, res, msg) => {
  * Sign Up
  */
 exports.signup = catchAsync(async (req, res, next) => {
-    if (req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
-        return res.status(200).json({
-            status: 'fail',
-            message: 'Please select captcha'
-        });
-    }
-    // Put your secret key here.
-    var secretKey = process.env.CAPTCHA_SECRET;
-    // req.connection.remoteAddress will provide IP address of connected user.
-    var verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
-    // Hitting GET request to the URL, Google will respond with success or error scenario.
-    request(verificationUrl, async (error, response, body) => {
-        body = JSON.parse(body);
-    });
     await User.create(req.body);
     return res.status(200).json({
         status: "success",
@@ -83,32 +69,8 @@ exports.signin = catchAsync(async (req, res, next) => {
         });
     }
 
-    if (req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null) {
-        return res.status(200).json({
-            status: 'fail',
-            message: 'Please select captcha'
-        });
-    }
-
-    var secretKey = process.env.CAPTCHA_SECRET;
-    // req.connection.remoteAddress will provide IP address of connected user.
-    var verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
-    // Hitting GET request to the URL, Google will respond with success or error scenario.
-    request(verificationUrl, async (error, response, body) => {
-        body = JSON.parse(body);
-        // Success will be true or false depending upon captcha validation.
-        if (body.success == undefined || !body.success) {
-            return res.status(200).json({
-                status: 'fail',
-                message: 'Failed captcha verification'
-            });
-        } else {
-            createSendToken(user, 200, res, 'Login Successfully');
-        }
-    });
+    createSendToken(user, 200, res, 'Login Successfully');
 });
-
-
 
 /**
  * Forgot Password
